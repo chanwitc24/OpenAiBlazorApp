@@ -1,0 +1,6 @@
+@OpenAiBlazorApp.WebAPI_HostAddress = http://localhost:5153
+
+GET {{OpenAiBlazorApp.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
