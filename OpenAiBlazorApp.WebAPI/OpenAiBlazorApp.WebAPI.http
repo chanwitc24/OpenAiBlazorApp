@@ -1,6 +1,120 @@
 @OpenAiBlazorApp.WebAPI_HostAddress = http://localhost:5153
 
-GET {{OpenAiBlazorApp.WebAPI_HostAddress}}/weatherforecast/
-Accept: application/json
+GET {{OpenAiBlazorApp.WebAPI_HostAddress}}/api/CashFlowStatement/
+
 
 ###
+POST {{OpenAiBlazorApp.WebAPI_HostAddress}}/api/CashFlowStatement/
+Accept: application/json
+Content-Type: application/json
+
+{
+    "userOwner": "chanwitc24",
+    "year": "2024",
+    "cashInflows": [
+        {            
+            "cashflowCategoryId": "CashInflows01",
+            "monthlyAmountList": [
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 },
+                { "amount": 150000 }
+                ]
+        },
+        {
+            "cashflowCategoryId": "CashInflows02",
+            "monthlyAmountList": [
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 },
+                { "amount": 12000 }
+                ]
+        }
+    ],
+    "cashOutflows": [
+        {
+            "cashflowCategoryId": "CashOutflowsCat01",
+            "monthlyAmountList": [
+                { "amount": 10000 },
+                { "amount": 10000 },
+                { "amount": 10000 },
+                { "amount": 10000 },
+                { "amount": 0 },
+                { "amount": 0 },
+                { "amount": 0 },
+                { "amount": 0 },
+                { "amount": 0 },
+                { "amount": 0 },
+                { "amount": 0 },
+                { "amount": 0 }
+                ]
+        },
+        {
+            "cashflowCategoryId": "CashOutflowsCat02",
+            "monthlyAmountList": [
+                { "amount": 104250 },
+                { "amount": 84250 },
+                { "amount": 104250 },
+                { "amount": 84250 },
+                { "amount": 114250 },
+                { "amount": 84250 },
+                { "amount": 104250 },
+                { "amount": 84250 },
+                { "amount": 104250 },
+                { "amount": 84250 },
+                { "amount": 104250 },
+                { "amount": 84250 }
+                ]
+        },
+        {
+            "cashflowCategoryId": "CashOutflowsCat03",
+            "monthlyAmountList": [
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 },
+                { "amount": 20000 }
+                ]
+        },
+        {
+            "cashflowCategoryId": "CashOutflowsCat04",
+            "monthlyAmountList": [
+                { "amount": 134250 },
+                { "amount": 114250 },
+                { "amount": 134250 },
+                { "amount": 114250 },
+                { "amount": 124250 },
+                { "amount": 104250 },
+                { "amount": 124250 },
+                { "amount": 104250 },
+                { "amount": 124250 },
+                { "amount": 104250 },
+                { "amount": 124250 },
+                { "amount": 104250 }
+                ]
+        }
+    ]
+}

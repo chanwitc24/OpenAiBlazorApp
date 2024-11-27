@@ -1,23 +1,33 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OpenAiBlazorApp.WebAPI.Models;
-public class CashInflow
+public class CashInflow : BaseEntity
 {
-    [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public required string CashInflowId { get; set; }
-    public string? CashflowCategory { get; set; }
-    private List<MonthlyAmount>? _monthlyAmountList;
-    public List<MonthlyAmount>? MonthlyAmountList
+    [Required]
+    public string CashflowCategoryId { get; private set; }
+
+    private IReadOnlyList<MonthlyAmount> _monthlyAmountList;
+    public IReadOnlyList<MonthlyAmount> MonthlyAmountList
     {
         get => _monthlyAmountList;
-        set
+        private set
         {
             _monthlyAmountList = value;
-            _totalCashInflows = _monthlyAmountList?.Sum(x => x.TotalAmount) ?? 0;
+            CalculateTotalCashInflows();
         }
     }
+
     private decimal _totalCashInflows;
     public decimal TotalCashInflows => _totalCashInflows;
+
+    public CashInflow(string cashflowCategoryId, IReadOnlyList<MonthlyAmount> monthlyAmountList)
+    {
+        CashflowCategoryId = cashflowCategoryId ?? throw new ArgumentNullException(nameof(cashflowCategoryId));
+        MonthlyAmountList = monthlyAmountList ?? new List<MonthlyAmount>();
+    }
+
+    private void CalculateTotalCashInflows()
+    {
+        _totalCashInflows = _monthlyAmountList?.Sum(x => x.TotalAmount) ?? 0;
+    }
 }
