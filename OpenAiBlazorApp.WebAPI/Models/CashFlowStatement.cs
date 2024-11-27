@@ -4,13 +4,13 @@ namespace OpenAiBlazorApp.WebAPI.Models;
 public class CashFlowStatement : BaseEntity
 {
     [Required]
-    public string UserOwner { get; private set; }
+    public string UserId { get; private set; }
 
     [Required]
     public string Year { get; private set; }
 
-    private IReadOnlyList<CashInflow> _cashInflows;
-    public IReadOnlyList<CashInflow> CashInflows
+    private IReadOnlyList<Cashflow> _cashInflows;
+    public IReadOnlyList<Cashflow> CashInflows
     {
         get => _cashInflows;
         private set
@@ -21,8 +21,8 @@ public class CashFlowStatement : BaseEntity
         }
     }
 
-    private IReadOnlyList<CashOutflow> _cashOutflows;
-    public IReadOnlyList<CashOutflow> CashOutflows
+    private IReadOnlyList<Cashflow> _cashOutflows;
+    public IReadOnlyList<Cashflow> CashOutflows
     {
         get => _cashOutflows;
         private set
@@ -42,22 +42,22 @@ public class CashFlowStatement : BaseEntity
     private decimal _netCashFlow;
     public decimal NetCashFlow => _netCashFlow;
 
-    public CashFlowStatement(string userOwner, string year, IReadOnlyList<CashInflow> cashInflows, IReadOnlyList<CashOutflow> cashOutflows)
+    public CashFlowStatement(string userOwner, string year, IReadOnlyList<Cashflow> cashInflows, IReadOnlyList<Cashflow> cashOutflows)
     {
-        UserOwner = userOwner ?? throw new ArgumentNullException(nameof(userOwner));
+        UserId = userOwner ?? throw new ArgumentNullException(nameof(userOwner));
         Year = year ?? throw new ArgumentNullException(nameof(year));
-        CashInflows = cashInflows ?? new List<CashInflow>();
-        CashOutflows = cashOutflows ?? new List<CashOutflow>();
+        CashInflows = cashInflows ?? new List<Cashflow>();
+        CashOutflows = cashOutflows ?? new List<Cashflow>();
     }
 
     private void CalculateTotalCashInflows()
     {
-        _totalCashInflows = _cashInflows?.Sum(x => x.TotalCashInflows) ?? 0;
+        _totalCashInflows = _cashInflows?.Sum(x => x.TotalCashflows) ?? 0;
     }
 
     private void CalculateTotalCashOutflows()
     {
-        _totalCashOutflows = _cashOutflows?.Sum(x => x.TotalCashOutflows) ?? 0;
+        _totalCashOutflows = _cashOutflows?.Sum(x => x.TotalCashflows) ?? 0;
     }
 
     private void CalculateNetCashFlow()

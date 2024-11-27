@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OpenAiBlazorApp.WebAPI.Models;
 using OpenAiBlazorApp.WebAPI.Services;
 

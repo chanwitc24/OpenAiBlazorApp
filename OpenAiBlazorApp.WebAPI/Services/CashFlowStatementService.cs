@@ -32,9 +32,9 @@ public class CashFlowStatementService
             foreach (var cashInflow in cashFlowStatement.CashInflows)
             {
                 cashInflow.Id ??= ObjectId.GenerateNewId().ToString();
-                if (cashInflow.MonthlyAmountList != null)
+                if (cashInflow.MonthlyAmounts != null)
                 {
-                    foreach (var monthlyAmount in cashInflow.MonthlyAmountList)
+                    foreach (var monthlyAmount in cashInflow.MonthlyAmounts)
                     {
                         monthlyAmount.Id ??= ObjectId.GenerateNewId().ToString();
                     }
@@ -46,9 +46,9 @@ public class CashFlowStatementService
             foreach (var cashOutflow in cashFlowStatement.CashOutflows)
             {
                 cashOutflow.Id ??= ObjectId.GenerateNewId().ToString();
-                if (cashOutflow.MonthlyAmountList != null)
+                if (cashOutflow.MonthlyAmounts != null)
                 {
-                    foreach (var monthlyAmount in cashOutflow.MonthlyAmountList)
+                    foreach (var monthlyAmount in cashOutflow.MonthlyAmounts)
                     {
                         monthlyAmount.Id ??= ObjectId.GenerateNewId().ToString();
                     }
