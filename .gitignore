@@ -7,3 +7,9 @@
 /OpenAiBlazorApp.WebAPI/bin/Debug/net9.0
 /OpenAiBlazorApp.WebAPI/obj
 /OpenAiBlazorApp.WebAPI/.vs/ProjectEvaluation
+/OpenAiBlazorApp.Application/bin/Debug/net9.0
+/OpenAiBlazorApp.Application/obj
+/OpenAiBlazorApp.Core/bin/Debug/net9.0
+/OpenAiBlazorApp.Core/obj
+/OpenAiBlazorApp.Infrastructure/bin/Debug/net9.0
+/OpenAiBlazorApp.Infrastructure/obj
