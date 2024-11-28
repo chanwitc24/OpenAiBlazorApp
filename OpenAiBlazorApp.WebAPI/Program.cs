@@ -5,6 +5,9 @@ using MongoDB.Driver;
 using OpenAiBlazorApp.Application.Services;
 using OpenAiBlazorApp.Core.Interfaces;
 using OpenAiBlazorApp.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,28 @@ builder.Services.AddSingleton(database);
 // Register repositories and services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
+
+
+// Configure JWT authentication
+var key = Encoding.ASCII.GetBytes("YourSecretKeyHere"); // Replace with your secret key
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = "YourIssuer",
+        ValidAudience = "YourAudience",
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
+});
 
 // Add Swagger generator
 builder.Services.AddSwaggerGen();

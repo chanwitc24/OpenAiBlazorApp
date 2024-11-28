@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAiBlazorApp.Application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAiBlazorApp.Infrastructure", "..\OpenAiBlazorApp.Infrastructure\OpenAiBlazorApp.Infrastructure.csproj", "{BE69A085-4210-46DD-B0C3-81E5536F49AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAiBlazorApp.Tests", "..\OpenAiBlazorApp.Tests\OpenAiBlazorApp.Tests.csproj", "{D4401964-3019-4A2A-ABCB-BF9A5CC7F394}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{BE69A085-4210-46DD-B0C3-81E5536F49AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BE69A085-4210-46DD-B0C3-81E5536F49AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BE69A085-4210-46DD-B0C3-81E5536F49AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4401964-3019-4A2A-ABCB-BF9A5CC7F394}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4401964-3019-4A2A-ABCB-BF9A5CC7F394}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4401964-3019-4A2A-ABCB-BF9A5CC7F394}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4401964-3019-4A2A-ABCB-BF9A5CC7F394}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

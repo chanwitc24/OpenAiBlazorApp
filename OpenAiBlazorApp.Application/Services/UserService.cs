@@ -10,6 +10,12 @@ public class UserService
     {
         _userRepository = userRepository;
     }
+    public async Task<User> AuthenticateAsync(string username, string password)
+    {
+        // Add your authentication logic here
+        var user = await _userRepository.GetUserByUsernameAndPasswordAsync(username, password);
+        return user;
+    }
 
     public async Task<User> GetUserByIdAsync(string id)
     {

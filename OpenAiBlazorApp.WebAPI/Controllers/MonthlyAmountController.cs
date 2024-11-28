@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OpenAiBlazorApp.Application.Services;
 using OpenAiBlazorApp.Core.Entities;
@@ -8,6 +9,7 @@ namespace OpenAiBlazorApp.WebAPI.Controllers
     [ApiVersion("2.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [Authorize]
     public class MonthlyAmountController : ControllerBase
     {
         private readonly MonthlyAmountService _monthlyAmountService;
