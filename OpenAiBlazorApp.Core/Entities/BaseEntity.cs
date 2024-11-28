@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 
-namespace OpenAiBlazorApp.WebAPI.Models;
+namespace OpenAiBlazorApp.Core.Entities;
 public abstract class BaseEntity
 {
     private string? _id;

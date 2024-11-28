@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OpenAiBlazorApp.WebAPI.Models;
-using OpenAiBlazorApp.WebAPI.Services;
+using OpenAiBlazorApp.Application.Services;
+using OpenAiBlazorApp.Core.Entities;
 
 namespace OpenAiBlazorApp.WebAPI.Controllers
 {
@@ -17,53 +17,46 @@ namespace OpenAiBlazorApp.WebAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public ActionResult<List<User>> GetV1() =>
-            _userService.Get();
-
-        [HttpGet, MapToApiVersion("2.0")]
-        public ActionResult<List<User>> GetV2() =>
-            _userService.Get();
-
-        [HttpGet("{id:length(24)}", Name = "GetUser")]
-        public ActionResult<User> Get(string id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<User>> GetUserById(string id)
         {
-            var user = _userService.Get(id);
+            var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
             }
-            return user;
+            return Ok(user);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<User>>> GetAllUsers()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            return Ok(users);
         }
 
         [HttpPost]
-        public ActionResult<User> Create(User user)
+        public async Task<ActionResult> AddUser(User user)
         {
-            _userService.Create(user);
-            return CreatedAtRoute("GetUser", new { id = user.Id!.ToString() }, user);
+            await _userService.AddUserAsync(user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
-        [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, User userIn)
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateUser(string id, User user)
         {
-            var user = _userService.Get(id);
-            if (user == null)
+            if (id != user.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
-            _userService.Update(id, userIn);
+            await _userService.UpdateUserAsync(user);
             return NoContent();
         }
 
-        [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUser(string id)
         {
-            var user = _userService.Get(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            _userService.Remove(user.Id!);
+            await _userService.DeleteUserAsync(id);
             return NoContent();
         }
     }

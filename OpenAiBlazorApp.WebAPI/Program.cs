@@ -1,20 +1,14 @@
-
-using Microsoft.Extensions.Options;
 using OpenAiBlazorApp.WebAPI;
-using OpenAiBlazorApp.WebAPI.Models;
-using OpenAiBlazorApp.WebAPI.Services;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using OpenAiBlazorApp.Application.Services;
+using OpenAiBlazorApp.Core.Interfaces;
+using OpenAiBlazorApp.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.Configure<PerFinsDatabaseSettings>(
-    builder.Configuration.GetSection(nameof(PerFinsDatabaseSettings)));
-
-builder.Services.AddSingleton<IPerFinsDatabaseSettings>(sp =>
-    sp.GetRequiredService<IOptions<PerFinsDatabaseSettings>>().Value);
-
 builder.Services.AddControllers();
 
 // Add API Versioning
@@ -32,7 +26,14 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services.AddSingleton<CashFlowStatementService>();
+// Configure MongoDB
+var mongoClient = new MongoClient(builder.Configuration.GetConnectionString("MongoDb"));
+var database = mongoClient.GetDatabase("PersonalFinancialDB");
+builder.Services.AddSingleton(database);
+
+// Register repositories and services
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserService>();
 
 // Add Swagger generator
 builder.Services.AddSwaggerGen();

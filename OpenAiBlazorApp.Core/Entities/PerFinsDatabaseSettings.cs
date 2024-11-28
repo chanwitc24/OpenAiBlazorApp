@@ -1,4 +1,4 @@
-﻿namespace OpenAiBlazorApp.WebAPI.Models;
+﻿namespace OpenAiBlazorApp.Core.Entities;
 public class PerFinsDatabaseSettings : IPerFinsDatabaseSettings
 {
     public required string CashFlowStatementsCollectionName { get; set; }

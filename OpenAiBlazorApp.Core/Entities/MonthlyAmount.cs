@@ -1,4 +1,4 @@
-﻿namespace OpenAiBlazorApp.WebAPI.Models;
+﻿namespace OpenAiBlazorApp.Core.Entities;
 public class MonthlyAmount : BaseEntity
 {
     public string CashflowId { get; private set; }

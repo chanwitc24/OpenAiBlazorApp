@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OpenAiBlazorApp.WebAPI.Models;
+namespace OpenAiBlazorApp.Core.Entities;
 public class CashFlowStatement : BaseEntity
 {
     [Required]

@@ -1,4 +1,4 @@
-﻿namespace OpenAiBlazorApp.WebAPI.Models;
+﻿namespace OpenAiBlazorApp.Core.Entities;
 public class User : BaseEntity
 {
     public required string Username { get; set; }

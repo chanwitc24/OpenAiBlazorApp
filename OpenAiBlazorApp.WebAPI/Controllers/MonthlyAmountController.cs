@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OpenAiBlazorApp.WebAPI.Models;
-using OpenAiBlazorApp.WebAPI.Services;
+using OpenAiBlazorApp.Application.Services;
+using OpenAiBlazorApp.Core.Entities;
 
 namespace OpenAiBlazorApp.WebAPI.Controllers
 {
@@ -18,52 +18,52 @@ namespace OpenAiBlazorApp.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<MonthlyAmount>> GetV1() =>
-            _monthlyAmountService.Get();
+        public async Task<ActionResult<List<MonthlyAmount>>> GetV1()
+        {
+            var monthlyAmounts = await _monthlyAmountService.GetAllMonthlyAmountsAsync();
+            return Ok(monthlyAmounts);
+        }
 
         [HttpGet, MapToApiVersion("2.0")]
-        public ActionResult<List<MonthlyAmount>> GetV2() =>
-            _monthlyAmountService.Get();
+        public async Task<ActionResult<List<MonthlyAmount>>> GetV2()
+        {
+            var monthlyAmounts = await _monthlyAmountService.GetAllMonthlyAmountsAsync();
+            return Ok(monthlyAmounts);
+        }
 
         [HttpGet("{id:length(24)}", Name = "GetMonthlyAmount")]
-        public ActionResult<MonthlyAmount> Get(string id)
+        public async Task<ActionResult<MonthlyAmount>> Get(string id)
         {
-            var monthlyAmount = _monthlyAmountService.Get(id);
+            var monthlyAmount = await _monthlyAmountService.GetMonthlyAmountByIdAsync(id);
             if (monthlyAmount == null)
             {
                 return NotFound();
             }
-            return monthlyAmount;
+            return Ok(monthlyAmount);
         }
 
         [HttpPost]
-        public ActionResult<MonthlyAmount> Create(MonthlyAmount monthlyAmount)
+        public async Task<ActionResult> Create(MonthlyAmount monthlyAmount)
         {
-            _monthlyAmountService.Create(monthlyAmount);
+            await _monthlyAmountService.AddMonthlyAmountAsync(monthlyAmount);
             return CreatedAtRoute("GetMonthlyAmount", new { id = monthlyAmount.Id!.ToString() }, monthlyAmount);
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, MonthlyAmount monthlyAmountIn)
+        public async Task<ActionResult> Update(string id, MonthlyAmount monthlyAmountIn)
         {
-            var monthlyAmount = _monthlyAmountService.Get(id);
-            if (monthlyAmount == null)
+            if (id != monthlyAmountIn.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
-            _monthlyAmountService.Update(id, monthlyAmountIn);
+            await _monthlyAmountService.UpdateMonthlyAmountAsync(monthlyAmountIn);
             return NoContent();
         }
 
         [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
-            var monthlyAmount = _monthlyAmountService.Get(id);
-            if (monthlyAmount == null)
-            {
-                return NotFound();
-            }
-            _monthlyAmountService.Remove(monthlyAmount.Id!);
+            await _monthlyAmountService.DeleteMonthlyAmountAsync(id);
             return NoContent();
         }
     }

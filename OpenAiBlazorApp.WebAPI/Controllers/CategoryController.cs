@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OpenAiBlazorApp.WebAPI.Models;
-using OpenAiBlazorApp.WebAPI.Services;
+using OpenAiBlazorApp.Application.Services;
+using OpenAiBlazorApp.Core.Entities;
 
 namespace OpenAiBlazorApp.WebAPI.Controllers
 {
@@ -18,52 +18,52 @@ namespace OpenAiBlazorApp.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Category>> GetV1() =>
-            _categoryService.Get();
+        public async Task<ActionResult<List<Category>>> GetV1()
+        {
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            return Ok(categories);
+        }
 
         [HttpGet, MapToApiVersion("2.0")]
-        public ActionResult<List<Category>> GetV2() =>
-            _categoryService.Get();
+        public async Task<ActionResult<List<Category>>> GetV2()
+        {
+            var categories = await _categoryService.GetAllCategoriesAsync();
+            return Ok(categories);
+        }
 
         [HttpGet("{id:length(24)}", Name = "GetCategory")]
-        public ActionResult<Category> Get(string id)
+        public async Task<ActionResult<Category>> Get(string id)
         {
-            var category = _categoryService.Get(id);
+            var category = await _categoryService.GetCategoryByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
-            return category;
+            return Ok(category);
         }
 
         [HttpPost]
-        public ActionResult<Category> Create(Category category)
+        public async Task<ActionResult> Create(Category category)
         {
-            _categoryService.Create(category);
+            await _categoryService.AddCategoryAsync(category);
             return CreatedAtRoute("GetCategory", new { id = category.Id!.ToString() }, category);
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, Category categoryIn)
+        public async Task<ActionResult> Update(string id, Category categoryIn)
         {
-            var category = _categoryService.Get(id);
-            if (category == null)
+            if (id != categoryIn.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
-            _categoryService.Update(id, categoryIn);
+            await _categoryService.UpdateCategoryAsync(categoryIn);
             return NoContent();
         }
 
         [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
-            var category = _categoryService.Get(id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-            _categoryService.Remove(category.Id!);
+            await _categoryService.DeleteCategoryAsync(id);
             return NoContent();
         }
     }

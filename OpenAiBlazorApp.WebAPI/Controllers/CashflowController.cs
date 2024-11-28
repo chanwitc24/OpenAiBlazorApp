@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using OpenAiBlazorApp.WebAPI.Models;
-using OpenAiBlazorApp.WebAPI.Services;
+using OpenAiBlazorApp.Application.Services;
+using OpenAiBlazorApp.Core.Entities;
 
 namespace OpenAiBlazorApp.WebAPI.Controllers
 {
@@ -18,52 +18,52 @@ namespace OpenAiBlazorApp.WebAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<Cashflow>> GetV1() =>
-            _cashflowService.Get();
+        public async Task<ActionResult<List<Cashflow>>> GetV1()
+        {
+            var cashflows = await _cashflowService.GetAllCashflowsAsync();
+            return Ok(cashflows);
+        }
 
         [HttpGet, MapToApiVersion("2.0")]
-        public ActionResult<List<Cashflow>> GetV2() =>
-            _cashflowService.Get();
+        public async Task<ActionResult<List<Cashflow>>> GetV2()
+        {
+            var cashflows = await _cashflowService.GetAllCashflowsAsync();
+            return Ok(cashflows);
+        }
 
         [HttpGet("{id:length(24)}", Name = "GetCashflow")]
-        public ActionResult<Cashflow> Get(string id)
+        public async Task<ActionResult<Cashflow>> Get(string id)
         {
-            var cashflow = _cashflowService.Get(id);
+            var cashflow = await _cashflowService.GetCashflowByIdAsync(id);
             if (cashflow == null)
             {
                 return NotFound();
             }
-            return cashflow;
+            return Ok(cashflow);
         }
 
         [HttpPost]
-        public ActionResult<Cashflow> Create(Cashflow cashflow)
+        public async Task<ActionResult> Create(Cashflow cashflow)
         {
-            _cashflowService.Create(cashflow);
+            await _cashflowService.AddCashflowAsync(cashflow);
             return CreatedAtRoute("GetCashflow", new { id = cashflow.Id!.ToString() }, cashflow);
         }
 
         [HttpPut("{id:length(24)}")]
-        public IActionResult Update(string id, Cashflow cashflowIn)
+        public async Task<ActionResult> Update(string id, Cashflow cashflowIn)
         {
-            var cashflow = _cashflowService.Get(id);
-            if (cashflow == null)
+            if (id != cashflowIn.Id)
             {
-                return NotFound();
+                return BadRequest();
             }
-            _cashflowService.Update(id, cashflowIn);
+            await _cashflowService.UpdateCashflowAsync(cashflowIn);
             return NoContent();
         }
 
         [HttpDelete("{id:length(24)}")]
-        public IActionResult Delete(string id)
+        public async Task<ActionResult> Delete(string id)
         {
-            var cashflow = _cashflowService.Get(id);
-            if (cashflow == null)
-            {
-                return NotFound();
-            }
-            _cashflowService.Remove(cashflow.Id!);
+            await _cashflowService.DeleteCashflowAsync(id);
             return NoContent();
         }
     }
