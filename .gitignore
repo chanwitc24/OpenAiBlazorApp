@@ -13,3 +13,5 @@
 /OpenAiBlazorApp.Core/obj
 /OpenAiBlazorApp.Infrastructure/bin/Debug/net9.0
 /OpenAiBlazorApp.Infrastructure/obj
+/OpenAiBlazorApp.Tests/bin/Debug/net9.0
+/OpenAiBlazorApp.Tests/obj
