@@ -26,6 +26,11 @@ namespace OpenAiBlazorApp.Application.Services
 
         public async Task AddCategoryAsync(Category category)
         {
+            // Validation logic here
+            if (category == null) throw new System.ArgumentNullException(nameof(category));
+            if (string.IsNullOrEmpty(category.Type)) throw new System.ArgumentException("Category type cannot be null or empty", nameof(category.Type));
+            if (category.Names == null || category.Names.Count == 0) throw new System.ArgumentException("Category names cannot be null or empty", nameof(category.Names));
+            
             await _categoryRepository.AddAsync(category);
         }
 
@@ -37,6 +42,15 @@ namespace OpenAiBlazorApp.Application.Services
         public async Task DeleteCategoryAsync(string id)
         {
             await _categoryRepository.DeleteAsync(id);
+        }
+
+        public string GetCategoryName(Category category, string languageCode)
+        {
+            if (category.Names != null && category.Names.TryGetValue(languageCode, out var name))
+            {
+                return name;
+            }
+            return category.Names != null && category.Names.TryGetValue("en", out var defaultName) ? defaultName : "Unknown";
         }
     }
 }

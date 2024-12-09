@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
     }
 
     public async Task AddAsync(User user)
-    {
+    {        
         user.PasswordHash = _passwordHasher.HashPassword(user.PasswordHash);
         await _users.InsertOneAsync(user);
     }
@@ -50,5 +50,12 @@ public class UserRepository : IUserRepository
         }
         return null;
     }
-
+    public async Task<string> GenerateKey()
+    {
+        return await PasswordHasher.GenerateSecretKeyAsync();
+    }
+    public async Task<List<User>> GetUsersByParentIdAsync(string parentId)
+    {
+        return await _users.Find(user => user.ParentId == parentId).ToListAsync();
+    }
 }

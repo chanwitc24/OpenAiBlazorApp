@@ -9,4 +9,6 @@ public interface IUserRepository
     Task UpdateAsync(User user);
     Task DeleteAsync(string id);
     Task<User> GetUserByUsernameAndPasswordAsync(string username, string password);
+    Task<string> GenerateKey();
+    Task<List<User>> GetUsersByParentIdAsync(string parentId);
 }

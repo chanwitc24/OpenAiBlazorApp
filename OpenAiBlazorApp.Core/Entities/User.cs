@@ -1,15 +1,20 @@
-﻿namespace OpenAiBlazorApp.Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace OpenAiBlazorApp.Core.Entities;
 public class User : BaseEntity
 {
-    public required string Username { get; set; }
-    public required string Email { get; set; }
-    public required string PasswordHash { get; set; }
+    [Required]
+    [StringLength(50, MinimumLength = 3)]
+    public string Username { get; set; }
 
-    public User(string username, string email, string passwordHash)
-    {
-        Username = username ?? throw new ArgumentNullException(nameof(username));
-        Email = email ?? throw new ArgumentNullException(nameof(email));
-        PasswordHash = passwordHash ?? throw new ArgumentNullException(nameof(passwordHash));
-    }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
 
+    [Required]
+    [StringLength(100, MinimumLength = 6)]
+    public string PasswordHash { get; set; }
+
+    public string? ParentId { get; set; }
+    public Parent? Parent { get; set; }
 }

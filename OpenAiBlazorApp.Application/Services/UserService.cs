@@ -16,6 +16,10 @@ public class UserService
         var user = await _userRepository.GetUserByUsernameAndPasswordAsync(username, password);
         return user;
     }
+    public async Task<string> GenerateKey()
+    {
+        return await _userRepository.GenerateKey();
+    }
 
     public async Task<User> GetUserByIdAsync(string id)
     {
@@ -29,6 +33,11 @@ public class UserService
 
     public async Task AddUserAsync(User user)
     {
+        if (user == null) throw new ArgumentNullException(nameof(user));
+        if (string.IsNullOrEmpty(user.Username)) throw new ArgumentException("Username cannot be null or empty", nameof(user.Username));
+        if (string.IsNullOrEmpty(user.Email)) throw new ArgumentException("Email cannot be null or empty", nameof(user.Email));
+        if (string.IsNullOrEmpty(user.PasswordHash)) throw new ArgumentException("Password cannot be null or empty", nameof(user.PasswordHash));
+
         await _userRepository.AddAsync(user);
     }
 
@@ -40,5 +49,9 @@ public class UserService
     public async Task DeleteUserAsync(string id)
     {
         await _userRepository.DeleteAsync(id);
+    }
+    public async Task<List<User>> GetUsersByParentIdAsync(string parentId)
+    {
+        return await _userRepository.GetUsersByParentIdAsync(parentId);
     }
 }

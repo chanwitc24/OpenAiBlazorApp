@@ -3,11 +3,14 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using OpenAiBlazorApp.Application.Services;
+using OpenAiBlazorApp.Application.Settings;
 using OpenAiBlazorApp.Core.Interfaces;
 using OpenAiBlazorApp.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using AutoMapper; // Add this using directive
+using OpenAiBlazorApp.Application.Mappings; // Add this using directive
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,10 +40,31 @@ builder.Services.AddSingleton(database);
 // Register repositories and services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<CategoryService>();
 
+// Bind JWT settings from configuration
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+// Register JwtTokenService
+builder.Services.AddScoped<JwtTokenService>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+
+// Retrieve JWT settings from configuration
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+var secretKey = jwtSettings!.SecretKey;
+var validIssuer = jwtSettings.ValidIssuer;
+var validAudience = jwtSettings.ValidAudience;
+
+if (string.IsNullOrEmpty(secretKey) || string.IsNullOrEmpty(validIssuer) || string.IsNullOrEmpty(validAudience))
+{
+    throw new InvalidOperationException("JWT settings are not configured properly.");
+}
+
+var key = Encoding.ASCII.GetBytes(secretKey);
 
 // Configure JWT authentication
-var key = Encoding.ASCII.GetBytes("YourSecretKeyHere"); // Replace with your secret key
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -54,8 +78,8 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "YourIssuer",
-        ValidAudience = "YourAudience",
+        ValidIssuer = validIssuer,
+        ValidAudience = validAudience,
         IssuerSigningKey = new SymmetricSecurityKey(key)
     };
 });
